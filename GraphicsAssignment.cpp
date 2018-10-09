@@ -1,4 +1,3 @@
-//  Includes
 #include <stdio.h>
 #include <math.h>
 #include <random>
@@ -18,7 +17,7 @@ double laserX = -50;
 double laserY = -50;
 
 double laserX1 = -1;
-double laserY1= -1;
+double laserY1 = -1;
 
 // draws a circle using OpenGL's gluDisk, given (x,y) of its center and ITS radius
 void drawCircle(int x, int y, float r) {
@@ -29,17 +28,24 @@ void drawCircle(int x, int y, float r) {
 	glPopMatrix();
 }
 
+int* bezier(float t, int* p0, int* p1, int* p2, int* p3)
+{
+	int res[2];
+	res[0] = pow((1 - t), 3)*p0[0] + 3 * t*pow((1 - t), 2)*p1[0] + 3 * pow(t, 2)*(1 - t)*p2[0] + pow(t, 3)*p3[0];
+	res[1] = pow((1 - t), 3)*p0[1] + 3 * t*pow((1 - t), 2)*p1[1] + 3 * pow(t, 2)*(1 - t)*p2[1] + pow(t, 3)*p3[1];
+	return res;
+}
 void KeyUp(unsigned char key, int x, int y) {
 	// reset the selectedBar value to 0 to unselect the selected bar
-	if(key=='d'||key=='a')
-	rotate = 0;
+	if (key == 'd' || key == 'a')
+		rotate = 0;
 	if (key == 'b') {
 		laserX = -50;
 		laserY = -50;
-		laserX1 =-1;
+		laserX1 = -1;
 		laserY1 = -1;
 	}
-		
+
 	// ask OpenGL to recall the display function to reflect the changes on the window
 	glutPostRedisplay();
 }
@@ -63,15 +69,91 @@ void key(unsigned char k, int x, int y)//keyboard function, takes 3 parameters
 			rotate = 5;
 		}
 	if (k == 'b') {
-	
+
 		laserX = plusX + 50;
 		laserY = 700;
 		laserX1 = plusX + 50;
 		laserY1 = 141;
 	}
-	
-		glutPostRedisplay();//redisplay to update the screen with the changes
+
+	glutPostRedisplay();//redisplay to update the screen with the changes
 }
+
+void drawEnemy() {
+	glPushMatrix();
+	//glRotated(rotate, 0.0f, 0.0f, 1.0f);
+	glColor3f(0.98, 0.86, 0.05);
+	drawCircle(500, 500, 50);
+	glPopMatrix();
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(500.0f, 570.0f,0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(520.0f, 550.0f,0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(480.0f, 550.0f,0.0f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(480.0f, 450.0f, 0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(520.0f, 450.0f, 0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(500.0f, 430.0f, 0.0f);
+	glEnd();
+
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(550.0f, 520.0f, 0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(570.0f, 500.0f, 0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(550.0f, 480.0f, 0.0f);
+	glEnd();
+
+
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(430.0f, 500.0f, 0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(450.0f, 520.0f, 0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(450.0f, 480.0f, 0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(480.0f, 480.0f, 0.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(520.0f, 480.0f, 0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(480.0f, 480.0f, 0.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(520.0f, 480.0f, 0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(460.0f, 520.0f, 0.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(480, 520.0f, 0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(520.0f, 520.0f, 0.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(540, 520.0f, 0.0f);
+	glEnd();
+}
+
 
 void Display() {
 	glClearColor(redBG, blueBG, greenBG, 0.0f);
@@ -79,14 +161,14 @@ void Display() {
 	/*glPushMatrix();
 		glTranslated(plusX, plusY, 0);*/
 
-	//largest circle
+		//largest circle
 	glPushMatrix();
 	glRotated(rotate, 0.0f, 0.0f, 1.0f);
 	glTranslated(plusX, plusY, 0);
 	glColor3f(1, 1, 1);
-	
-	drawCircle(50 , 20, 30);
+	drawCircle(50, 20, 30);
 	glPopMatrix();
+
 	//middle circle
 	glPushMatrix();
 	glRotated(rotate, 0.0f, 0.0f, 1.0f);
@@ -94,29 +176,29 @@ void Display() {
 	glColor3f(1, 1, 1);
 	//glTranslated(plusX, plusY, 0);
 
-	drawCircle(50 , 60 , 25);
+	drawCircle(50, 60, 25);
 	glPopMatrix();
 	//small circle
 	glPushMatrix();
 	glRotated(rotate, 0.0f, 0.0f, 1.0f);
 	glColor3f(1, 1, 1);
 	glTranslated(plusX, plusY, 0);
-	drawCircle(50 , 100 , 20); //draw circle
+	drawCircle(50, 100, 20); //draw circle
 	glPopMatrix();
-/////////////////FIRST EYE	
-//	glPushMatrix();
-//	glColor3f(0, 0, 0);
-//	drawCircle(45, 110, 2);
-//	glPushMatrix();s
-//
-//	///////// SECOND EYE
-//	glColor3f(0, 0, 0);
-//	drawCircle(55, 110, 2);
-	/*glPopMatrix();
-	glPopMatrix();
-	glPopMatrix();*/
+	/////////////////FIRST EYE	
+	//	glPushMatrix();
+	//	glColor3f(0, 0, 0);
+	//	drawCircle(45, 110, 2);
+	//	glPushMatrix();s
+	//
+	//	///////// SECOND EYE
+	//	glColor3f(0, 0, 0);
+	//	drawCircle(55, 110, 2);
+		/*glPopMatrix();
+		glPopMatrix();
+		glPopMatrix();*/
 
-	//DRAW HIS HAT
+		//DRAW HIS HAT
 	glPushMatrix();
 	glRotated(rotate, 0.0f, 0.0f, 1.0f);
 	glTranslated(plusX, plusY, 0);
@@ -136,9 +218,9 @@ void Display() {
 	glTranslated(plusX, plusY, 0);
 	glBegin(GL_LINES);
 	glColor3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(75.0f , 60.0f, 0.0f);
+	glVertex3f(75.0f, 60.0f, 0.0f);
 	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(85.0f, 85.0f , 0.0f);
+	glVertex3f(85.0f, 85.0f, 0.0f);
 	glColor3f(0.5f, 0.5f, 0.5f);
 	glEnd();
 	glPopMatrix();
@@ -148,9 +230,9 @@ void Display() {
 	glTranslated(plusX, plusY, 0);
 	glBegin(GL_LINES);
 	glColor3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(25.0f , 60.0f , 0.0f);
+	glVertex3f(25.0f, 60.0f, 0.0f);
 	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(15.0f , 85.0f , 0.0f);
+	glVertex3f(15.0f, 85.0f, 0.0f);
 	glColor3f(0.5f, 0.5f, 0.5f);
 	glEnd();
 	glPopMatrix();
@@ -167,7 +249,7 @@ void Display() {
 	glEnd();
 	glPopMatrix();
 	////
-
+	drawEnemy();
 	glFlush();
 }
 
@@ -179,7 +261,7 @@ void main(int argc, char** argr) {
 	glutCreateWindow("Assignment 1");
 	glutDisplayFunc(Display);
 	glutKeyboardFunc(key);
-	glutKeyboardUpFunc(KeyUp); 
+	glutKeyboardUpFunc(KeyUp);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glPointSize(9.0);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);

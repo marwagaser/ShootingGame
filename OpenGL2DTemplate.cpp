@@ -619,16 +619,15 @@ void Anim() {
 		}
 
 		
-		double puLX1 = 480 + P2X;
-		double puLY1 = 430 + P2Y;
-		if (puLX1 >= rangeCharacterXLOW & puLX1 <= rangeCharacterX & puLY1 <= rangeCharacterY & puLY1 >= 0 /*& puHX1 >= rangeCharacterXLOW & puHX1 <= rangeCharacterX *//*& puHY1 <= rangeCharacterY & puHY1 >= 0*/) {
+		double p2x1 = 520 + P2X;
+		double p2x2 = 480 + P2X;
+		double p2Y1 = 430 + P2Y;
+		if ((p2x1 >= rangeCharacterXLOW & p2x1 <= rangeCharacterX & p2Y1 >= 0 & p2Y1 <= rangeCharacterY) | (p2x2 >= rangeCharacterXLOW & p2x2 <= rangeCharacterX & p2Y1 >= 0 & p2Y1 <= rangeCharacterY))
+		{
 			slide = slide + 0.5;
-			P2X = -1000;
-			P2Y = 0;
-			std::cout << "sliding rate" << slide;
+			std::cout << "slide is " << slide << "\n";
+			P2X = -8000;
 		}
-
-	
 	glutPostRedisplay();	
 }
 void bullet(void)

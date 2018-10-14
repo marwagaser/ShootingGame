@@ -61,6 +61,17 @@ double enemyDefenderY = 0;
 double defenderToolX = 0; 
 double defenderToolY = 0;
 
+double XH;
+double XL;
+double YL;
+double	YH;
+
+double P1X = -800;
+double P1Y = 0;
+
+double P2X = -1000;
+double P2Y = 0;
+int slide = 5;
 int p0[2] = {-400,5};
 int p1[2] = {190,54};
 int p2[2] = {150,10};
@@ -69,6 +80,79 @@ int* points = new int [2];
 double n = count * enemyX;
 void print(int x, int y, char *string);
 void animatedBackground();
+
+void drawCircle(int x, int y, float r) {
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	GLUquadric *quadObj = gluNewQuadric();
+	gluDisk(quadObj, 0, r, 50, 50);
+	glPopMatrix();
+}
+void drawPlayer() {
+	//largest circle
+	glPushMatrix();
+	glRotated(rotate, 0.0f, 0.0f, 1.0f);
+	glTranslatef(plusX, plusY, 0);
+	glColor3f(1, 1, 1);
+	drawCircle(50, 20, 30);
+	glPopMatrix();
+
+	//middle circle
+	glPushMatrix();
+	glRotated(rotate, 0.0f, 0.0f, 1.0f);
+	glTranslatef(plusX, plusY, 0);
+	glColor3f(1, 1, 1);
+	//glTranslated(plusX, plusY, 0);
+
+	drawCircle(50, 60, 25);
+	glPopMatrix();
+	//small circle
+	glPushMatrix();
+	glRotated(rotate, 0.0f, 0.0f, 1.0f);
+	glColor3f(1, 1, 1);
+	glTranslatef(plusX, plusY, 0);
+	drawCircle(50, 100, 20); //draw circle
+	glPopMatrix();
+
+	//DRAW HIS HAT
+	glPushMatrix();
+	glRotated(rotate, 0.0f, 0.0f, 1.0f);
+	glTranslatef(plusX, plusY, 0);
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(25.0f, 120.0f, 0.0f);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(50.0f, 140.0f, 0.0f);
+	glColor3f(1.f, 0.0f, 0.0f);
+	glVertex3f(75.0f, 120.0f, 0.0f);
+	glEnd();
+	glPopMatrix();
+
+	//DRA HIS HANDS 
+	glPushMatrix();
+	glRotated(rotate, 0.0f, 0.0f, 1.0f);
+	glTranslatef(plusX, plusY, 0);
+	glBegin(GL_LINES);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(75.0f, 60.0f, 0.0f);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(85.0f, 85.0f, 0.0f);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glEnd();
+	glPopMatrix();
+	//HIS LEFT HAND
+	glPushMatrix();
+	glRotated(rotate, 0.0f, 0.0f, 1.0f);
+	glTranslatef(plusX, plusY, 0);
+	glBegin(GL_LINES);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(25.0f, 60.0f, 0.0f);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(15.0f, 85.0f, 0.0f);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glEnd();
+	glPopMatrix();
+}
 // draws a circle using OpenGL's gluDisk, given (x,y) of its center and ITS radius
 void drawScore() {
 	glPushMatrix();
@@ -84,6 +168,7 @@ void drawScore() {
 	glEnd();
 	glPopMatrix();
 }
+
 
 void drawHealth() {
 	glPushMatrix();
@@ -101,13 +186,7 @@ void drawHealth() {
 	glEnd();
 	glPopMatrix();
 }
-void drawCircle(int x, int y, float r) {
-	glPushMatrix();
-	glTranslatef(x, y, 0);
-	GLUquadric *quadObj = gluNewQuadric();
-	gluDisk(quadObj, 0, r, 50, 50);
-	glPopMatrix();
-}
+
  
 void drawEnemy() {
 	//draw sun base
@@ -193,16 +272,14 @@ void drawEnemy() {
 void enemyDefender() {
 	glPushMatrix();
 	glTranslatef(enemyDefenderX, enemyDefenderY, 0.0f);
-	glColor3f(0.21, 0.21, 0.21);
-	drawCircle(500, 300, 30);
-	///////////
-	glColor3f(0.37, 0.46, 0.37);
+
+	glColor3f(0.37, 0.46, 0.37); //middle
 	drawCircle(530, 300, 40);
 
-	glColor3f(0.37, 0.46, 0.37);
-	drawCircle(470, 300, 40);
+	glColor3f(0.37, 0.46, 0.37); //left
+	drawCircle(470, 300, 40); 
 
-	glColor3f(0.37, 0.46, 0.37);
+	glColor3f(0.37, 0.46, 0.37); //right
 	drawCircle(590, 300, 40);
 	glPopMatrix();
 
@@ -283,7 +360,7 @@ void key(unsigned char k, int x, int y)//keyboard function, takes 3 parameters
 									// x and y are mouse postion when the key was pressed.
 {
 	if (k == 'd') {//if the letter d is pressed, then the object will be translated in the x axis by 10 (moving to the right).
-		plusX += 5;
+		plusX += slide;
 		greenBG = 0;
 		rotate = -5;
 	}
@@ -292,7 +369,7 @@ void key(unsigned char k, int x, int y)//keyboard function, takes 3 parameters
 		if (plusX <= 0) {
 		}
 		else {
-			plusX -= 5;
+			plusX -= slide;
 			greenBG = 0.5;
 			rotate = 5;
 		}
@@ -300,116 +377,53 @@ void key(unsigned char k, int x, int y)//keyboard function, takes 3 parameters
 }
 
 
-void Display() {
-	glClearColor(redBG, blueBG, greenBG, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	/*glPushMatrix();
-		glTranslated(plusX, plusY, 0);*/
-	////////////////////////////////
-	
-	animatedBackground();
 
-	if(score==-1)
-	print(0, 500, "GAME OVER");
-	glColor3f(1, 0, 0);
-	char* theScore[20];
-
-	//
-	
-	if (score >= 0) {
-		sprintf((char *)theScore, "SCORE= %d", score);
-		print(785, 450, (char *)theScore);
-
-	}
-
-
-	////
-	if (score >= 0) {
-		drawScore();
-		drawHealth();
-		drawBullets();
-	}
-	
-		//largest circle
+void drawPowerUp2() {
 	glPushMatrix();
-	glRotated(rotate, 0.0f, 0.0f, 1.0f);
-	glTranslatef(plusX, plusY, 0);
-	glColor3f(1, 1, 1);
-	drawCircle(50, 20, 30);
-	glPopMatrix();
-
-	//middle circle
-	glPushMatrix();
-	glRotated(rotate, 0.0f, 0.0f, 1.0f);
-	glTranslatef(plusX, plusY, 0);
-	glColor3f(1, 1, 1);
-	//glTranslated(plusX, plusY, 0);
-
-	drawCircle(50, 60, 25);
-	glPopMatrix();
-	//small circle
-	glPushMatrix();
-	glRotated(rotate, 0.0f, 0.0f, 1.0f);
-	glColor3f(1, 1, 1);
-	glTranslatef(plusX, plusY, 0);
-	drawCircle(50, 100, 20); //draw circle
-	glPopMatrix();
-
-		//DRAW HIS HAT
-	glPushMatrix();
-	glRotated(rotate, 0.0f, 0.0f, 1.0f);
-	glTranslatef(plusX, plusY, 0);
+	glTranslatef(P2X, P2Y, 0.0f);
+	glScalef(1.2, 1.2, 0);
 	glBegin(GL_TRIANGLES);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(25.0f, 120.0f, 0.0f);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(50.0f, 140.0f, 0.0f);
-	glColor3f(1.f, 0.0f, 0.0f);
-	glVertex3f(75.0f, 120.0f, 0.0f);
+	glColor3f(0.18f, 0.83f, 0.70f);
+	glVertex3f(480.0f, 450.0f, 0.0f);
+	glColor3f(0.18f, 0.83f, 0.70f);
+	glVertex3f(520.0f, 450.0f, 0.0f);
+	glColor3f(0.98, 0.55, 0.05);
+	glVertex3f(500.0f, 430.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
+}
 
-	//DRA HIS HANDS 
+void drawPowerUp1() {
 	glPushMatrix();
-	glRotated(rotate, 0.0f, 0.0f, 1.0f);
-	glTranslatef(plusX, plusY, 0);
-	glBegin(GL_LINES);
-	glColor3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(75.0f, 60.0f, 0.0f);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(85.0f, 85.0f, 0.0f);
-	glColor3f(0.5f, 0.5f, 0.5f);
+	glTranslatef(P1X, P1Y, 0.0f);
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 0.41, 0.70f);
+	glVertex3f(110.0f, 300.0f, 0.0f);
+	glColor3f(1.0f, 0.41, 0.70f);
+	glVertex3f(130.0f, 300.0f, 0.0f);
+	glColor3f(1.0f, 0.41, 0.70f);
+	glVertex3f(130.0f, 350.0f, 0.0f);
+	glColor3f(1.0f, 0.41, 0.70f);
+	glVertex3f(110.0f, 350.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
-	//HIS LEFT HAND
-	glPushMatrix();
-	glRotated(rotate, 0.0f, 0.0f, 1.0f);
-	glTranslatef(plusX, plusY, 0);
-	glBegin(GL_LINES);
-	glColor3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(25.0f, 60.0f, 0.0f);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(15.0f, 85.0f, 0.0f);
-	glColor3f(0.5f, 0.5f, 0.5f);
-	glEnd();
-	glPopMatrix();
-
-	drawEnemy();
-	 drawObstacle();
-	enemyDefender();
-	glFlush();
 }
 void Timer(int value) {
-	// set the enemy defender y loctation anywhere between
-	enemyDefenderY = rand() % 780 + 10;
-	
+	// set the enemy defender y loctation anywhere between 10 an 780
+	enemyDefenderY = rand() % 300 + 10; 
+	P1X = rand() % 400 + 0;
+	P1Y = rand() % 300 + 0;
+	P2X = rand() % 600 + 50;
+	P2Y = rand() % 500 + 3;
+
+	//P1X = rand() % 400 + 0;
+	//P1Y = rand() % 300 + 0;
 	// ask OpenGL to recall the display function to reflect the changes on the window
 	glutPostRedisplay();
 
 	// recall the Timer function after 20 seconds (20,000 milliseconds)
-	glutTimerFunc(1 * 1000, Timer, 0);
+	glutTimerFunc(20 * 1000, Timer, 0);
 }
-
 void print(int x, int y, char *string)
 {
 	int len, i;
@@ -429,7 +443,7 @@ void print(int x, int y, char *string)
 
 void animatedBackground() {
 	glPushMatrix();
-	glTranslatef(0, darkBlueY, 0);
+	glTranslatef(darkBlueY,0, 0);
 	glBegin(GL_POLYGON);
 	
 	glColor3f(0.16, 0.16, 50.0f);
@@ -570,9 +584,24 @@ void Anim() {
 			plusY = -20000;
 		}
 		darkBlueY = darkBlueY + 5;
-		if (darkBlueY >= 600) {
+		if (darkBlueY >=1000) {
 			std::cout << "moving";
 			darkBlueY = 0;
+		}
+		XH = 590 + enemyDefenderX;
+		XL = 395 + enemyDefenderX;
+
+		YH = 340 + enemyDefenderY;
+		YL = 260 + enemyDefenderY;
+		if (bulletYY >= YL & bulletYY <= YH & bulletX <= XH & bulletX >= XL) { // enemy Defender block bullet
+			std::cout << "blocked";
+			bulletX = -8000;
+		}
+		if (P1Y > -400) {
+			P1Y = P1Y - 2;
+		}
+		if (P2Y > -600) {
+			P2Y = P2Y - 4;
 		}
 	glutPostRedisplay();	
 }
@@ -587,6 +616,48 @@ void bullet(void)
 	}
 	glutPostRedisplay();
 }
+
+void Display() {
+	glClearColor(redBG, blueBG, greenBG, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	/*glPushMatrix();
+		glTranslated(plusX, plusY, 0);*/
+		////////////////////////////////
+
+	animatedBackground();
+	
+
+	if (score == -1)
+		print(0, 500, "GAME OVER");
+	glColor3f(1, 0, 0);
+	char* theScore[20];
+
+	//
+
+	if (score >= 0) {
+		sprintf((char *)theScore, "SCORE= %d", score);
+		print(785, 450, (char *)theScore);
+
+	}
+
+
+	////
+	if (score >= 0) {
+		drawScore();
+		drawHealth();
+		drawBullets();
+	}
+
+	drawPlayer();
+
+	drawEnemy();
+	drawObstacle();
+	enemyDefender();
+	drawPowerUp1();
+	drawPowerUp2();
+	glFlush();
+}
+
 void main(int argc, char** argr) {
 	glutInit(&argc, argr);
 	glutInitWindowSize(1000, 600);

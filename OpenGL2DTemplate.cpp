@@ -46,6 +46,9 @@ double enemyY = 0;
 double obstacleX = 800;
 double obstacleY = 0;
 
+
+
+
 bool shoot = false;
 bool isDone = false;
 bool inProgress = false;
@@ -69,9 +72,9 @@ double	YH;
 double P1X = -800;
 double P1Y = 0;
 
-double P2X = -1000;
+double P2X = -800;
 double P2Y = 0;
-int slide = 5;
+double slide = 5;
 int p0[2] = {-400,5};
 int p1[2] = {190,54};
 int p2[2] = {150,10};
@@ -381,7 +384,7 @@ void key(unsigned char k, int x, int y)//keyboard function, takes 3 parameters
 void drawPowerUp2() {
 	glPushMatrix();
 	glTranslatef(P2X, P2Y, 0.0f);
-	glScalef(1.2, 1.2, 0);
+	//glScalef(1.2, 1.2, 0);
 	glBegin(GL_TRIANGLES);
 	glColor3f(0.18f, 0.83f, 0.70f);
 	glVertex3f(480.0f, 450.0f, 0.0f);
@@ -414,7 +417,7 @@ void Timer(int value) {
 	P1X = rand() % 400 + 0;
 	P1Y = rand() % 300 + 0;
 	P2X = rand() % 600 + 50;
-	P2Y = rand() % 500 + 3;
+	P2Y = rand() % 500 + 0;
 
 	//P1X = rand() % 400 + 0;
 	//P1Y = rand() % 300 + 0;
@@ -600,9 +603,32 @@ void Anim() {
 		if (P1Y > -400) {
 			P1Y = P1Y - 2;
 		}
-		if (P2Y > -600) {
-			P2Y = P2Y - 4;
+		if (P2Y > -700) {
+			P2Y = P2Y - 3;
 		}
+		double puHX = 130 + P1X;
+		double puLX = 110 + P1X;
+		double puHY = 350 + P1Y;
+		double puLY = 300 + P1Y;
+		if (puLX >= rangeCharacterXLOW & puLX <= rangeCharacterX & puLY <= rangeCharacterY & puLY >= 0 & puHX >= rangeCharacterXLOW & puHX <= rangeCharacterX & puHY <= rangeCharacterY & puHY >= 0) {
+	std::cout << "power1 obtained\n";
+	score = score + 100;
+	P1X = -1000;
+	P1Y = 0;
+	
+		}
+
+		
+		double puLX1 = 480 + P2X;
+		double puLY1 = 430 + P2Y;
+		if (puLX1 >= rangeCharacterXLOW & puLX1 <= rangeCharacterX & puLY1 <= rangeCharacterY & puLY1 >= 0 /*& puHX1 >= rangeCharacterXLOW & puHX1 <= rangeCharacterX *//*& puHY1 <= rangeCharacterY & puHY1 >= 0*/) {
+			slide = slide + 0.5;
+			P2X = -1000;
+			P2Y = 0;
+			std::cout << "sliding rate" << slide;
+		}
+
+	
 	glutPostRedisplay();	
 }
 void bullet(void)
@@ -667,6 +693,7 @@ void main(int argc, char** argr) {
 	glutKeyboardFunc(key);
 	glutIdleFunc(Anim);
 	glutKeyboardUpFunc(KeyUp);
+	glutTimerFunc(0, Timer, 0);
 	glutTimerFunc(0, Timer, 0);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glPointSize(9.0);

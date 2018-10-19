@@ -70,7 +70,7 @@
 int count = 1;
 double plusX = 0;
 double plusY = 0;
-
+double scaleScore = 1;
 double isDefending = false;
 double redBG = 0;
 double blueBG = 0.7;
@@ -94,6 +94,7 @@ double defenderBulletY = -800;
 int score = 0;
 double scoreX = 0;
 double healthX = 0;
+//double scoreX = 0;
 double healthOriginal = 1;
 
 double positionObstacle = 0;
@@ -224,15 +225,16 @@ void drawPlayer() {
 // draws a circle using OpenGL's gluDisk, given (x,y) of its center and ITS radius
 void drawScore() {
 	glPushMatrix();
+	glTranslatef(scoreX, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
 	glColor3f(1.0, 1.0, 0.0f);
-	glVertex3f(0.0f, 500.0f, 0.0f);
+	glVertex3f(-2000.0f, 500.0f, 0.0f);
 	glColor3f(1.0, 1.0, 0.0f);
-	glVertex3f(200.0f, 500.0f, 0.0f);
+	glVertex3f(5.0f, 500.0f, 0.0f);
 	glColor3f(1.0, 1.0, 0.0f);
-	glVertex3f(200.0f, 480.0f, 0.0f);
+	glVertex3f(5.0f, 480.0f, 0.0f);
 	glColor3f(1.0, 1.0, 0.0f);
-	glVertex3f(0.0f, 480.0f, 0.0f);
+	glVertex3f(-2000.0f, 480.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
 }
@@ -342,13 +344,17 @@ void enemyDefender() {
 	glTranslatef(enemyDefenderX, enemyDefenderY, 0.0f);
 
 	glColor3f(0.37, 0.46, 0.37); //middle
-	drawCircle(530, 300, 40);
+	drawCircle(230, 300, 40);
+
+	//530
+	//470
+	//590
 
 	glColor3f(0.37, 0.46, 0.37); //left
-	drawCircle(470, 300, 40);
+	drawCircle(170, 300, 40);
 
 	glColor3f(0.37, 0.46, 0.37); //right
-	drawCircle(590, 300, 40);
+	drawCircle(290, 300, 40);
 	glPopMatrix();
 
 }
@@ -357,22 +363,22 @@ void defenderBullets() {
 	glPushMatrix();
 	glTranslatef(defenderBulletX, defenderBulletY, 0.0f);
 	glColor3f(1, 1, 1);
-	drawCircle(530, 253, 7);
+	drawCircle(230, 253, 7);
 	////
 	glBegin(GL_TRIANGLES);
 	glColor3f(1, 1, 1);
-	glVertex3f(530.0f, 246.0f, 0.0f);
+	glVertex3f(230.0f, 246.0f, 0.0f);
 	glColor3f(1, 1, 1);
-	glVertex3f(540.0f, 240.0f, 0.0f);
+	glVertex3f(240.0f, 240.0f, 0.0f);
 	glColor3f(1, 1, 1);
-	glVertex3f(520.0f, 240.0f, 0.0f);
+	glVertex3f(220.0f, 240.0f, 0.0f);
 	glEnd();
 	/////
 	glBegin(GL_LINES);
 	glColor3f(1, 1, 1);
-	glVertex3f(530.0f, 240.0f, 0.0f);
+	glVertex3f(230.0f, 240.0f, 0.0f);
 	glColor3f(1, 1, 1);
-	glVertex3f(530, 230.0f, 0.0f);
+	glVertex3f(230, 230.0f, 0.0f);
 	glEnd();
 
 
@@ -505,7 +511,7 @@ void drawPowerUp1() {
 void Timer(int value) {
 	// set the enemy defender y loctation anywhere between 10 an 780
 	enemyDefenderY = rand() % 300 + 10;
-	enemyDefenderX = rand() % 500 + 10;
+	enemyDefenderX = rand() % 800;
 	P1X = rand() % 400 + 0;
 	P1Y = rand() % 300 + 0;
 	P2X = rand() % 600 + 50;
@@ -516,8 +522,8 @@ void Timer(int value) {
 	// ask OpenGL to recall the display function to reflect the changes on the window
 	glutPostRedisplay();
 
-	// recall the Timer function after 20 seconds (20,000 milliseconds)
-	glutTimerFunc(20 * 1000, Timer, 0);
+	// recall the Timer function after 5 seconds (5,000 milliseconds)
+	glutTimerFunc(5 * 1000, Timer, 0);
 }
 void print(int x, int y, char *string)
 {
@@ -592,6 +598,31 @@ void animatedBackground() {
 	//	glTexCoord2f(0.0f, rep);			 glVertex3f(200, 500, 0);
 	//	glEnd();
 
+	////
+	glBegin(GL_POLYGON);
+
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glVertex3f(100.0f, -300.0f, 0.0f);
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glVertex3f(200.0f, -300.0f, 0.0f);
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glVertex3f(200.0f, -200.0f, 0.0f);
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glVertex3f(100.0f, -200.0f, 0.0f);
+	glEnd();
+
+
+	glBegin(GL_TRIANGLES);
+
+	glColor3f(0.50f, 0.0f, 0.0f);
+	glVertex3f(150.0f, -400.0f, 0.0f);
+	glColor3f(0.50f, 0.0f, 0.0f);
+	glVertex3f(200.0f, -300.0f, 0.0f);
+	glColor3f(0.50f, 0.0f, 0.0f);
+	glVertex3f(100.0f, -300.0f, 0.0f);
+	glEnd();
+	//////////
+
 	glBegin(GL_POLYGON);
 	glColor3f(0.0f, 0.39, 0.0f);
 	glVertex3f(0.0f, 0.0f, 0.0f);
@@ -607,20 +638,20 @@ void animatedBackground() {
 }
 
 void Anim() {
-	/*p2[0] = rand() %2;
-	p2[1] = rand() % 10+5;
-	p3[0] = rand() %6+4;
-	p3[1]= rand() % 12+5;*/
+	p2[0] = rand() % 151 + 150;
+	p2[1] = rand() % 11 + 10;
+	p3[0] = rand() % 301 + 300;
+	p3[1] = rand() % 40+39;
 	/*p2[0] = rand() % 900;
-	p2[1]= rand() %570+500;*/
-	/*p3[0] = rand() %900;
-	p3[1]= rand() % 570;*/
-
-	//std::cout << p1[0]<< "  point 0 X ";
-	//std::cout << p1[1] << " point 0 Y ";
-	//std::cout << p2[0] << " point 1 X ";
-	/*darkBlueY += 8;
-	lightBlueY += 8;*/
+	p2[1] = rand() % 470 + 100;
+	p3[0] = rand() %900;
+	p3[1] = rand() % 370+100;
+*/
+//std::cout << p1[0]<< "  point 0 X ";
+//std::cout << p1[1] << " point 0 Y ";
+//std::cout << p2[0] << " point 1 X ";
+/*darkBlueY += 8;
+lightBlueY += 8;*/
 
 	if (t < 1) {
 		int* points = bezier(t, p0, p1, p2, p3);
@@ -682,6 +713,8 @@ void Anim() {
 		if (refreshHealth == true) {
 			healthX = 0;
 			healthOriginal = healthOriginal * 1.5;
+			score = 0;
+			scoreX = 0;
 			refreshHealth = false;
 		}
 	}
@@ -709,6 +742,7 @@ void Anim() {
 	if (dead == true) {
 		healthX -= 0.5;
 		score++;
+		scoreX += 0.5;
 		dead = false;
 		if (healthX <= -200)
 			refreshHealth = true;
@@ -737,8 +771,8 @@ void Anim() {
 		std::cout << "moving";
 		darkBlueY = 0;
 	}
-	XH = 590 + enemyDefenderX;
-	XL = 395 + enemyDefenderX;
+	XH = 290 + enemyDefenderX;
+	XL = 95 + enemyDefenderX;
 
 	YH = 340 + enemyDefenderY;
 	YL = 260 + enemyDefenderY;
@@ -759,6 +793,8 @@ void Anim() {
 	if (puLX >= rangeCharacterXLOW & puLX <= rangeCharacterX & puLY <= rangeCharacterY & puLY >= 0 & puHX >= rangeCharacterXLOW & puHX <= rangeCharacterX & puHY <= rangeCharacterY & puHY >= 0) {
 		std::cout << "power1 obtained\n";
 		score = score + 100;
+		//scaleScore = scaleScore * 2;
+		scoreX += 1;
 		P1X = -1000;
 		P1Y = 0;
 
@@ -774,7 +810,7 @@ void Anim() {
 		P2X = -8000;
 	}
 
-	double defenderBulletX1 = 530 + defenderBulletX;
+	double defenderBulletX1 = 230 + defenderBulletX;
 	double defenderBulletY1 = 230 + defenderBulletY;
 
 	if (defenderBulletX1 >= rangeCharacterXLOW & defenderBulletX1 <= rangeCharacterX & defenderBulletY1 >= rangeCharacterYLOW & defenderBulletY1 <= rangeCharacterY) {
@@ -819,7 +855,7 @@ void Display() {
 
 	if (score >= 0) {
 		sprintf((char *)theScore, "SCORE= %d", score);
-		print(785, 450, (char *)theScore);
+		print(10, 550, (char *)theScore);
 
 	}
 
